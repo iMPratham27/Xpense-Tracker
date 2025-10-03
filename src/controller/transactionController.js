@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 
 import { transactionModel } from "../model/transactionModel.js";
 
@@ -24,6 +25,15 @@ export const createTransaction = async(req, res) => {
             }
         }
 
+        let txnDate = new Date(date);
+
+        if (isNaN(txnDate)) {
+        return res.status(400).json({ message: "Invalid date format" });
+        }
+
+        // Normalize to UTC midnight → avoids timezone issues
+        txnDate.setUTCHours(0, 0, 0, 0);
+
         const transaction = await transactionModel.create({
             // user: req.user._id,
             user: "68dee6667932bad669e88d22", // just for testing
@@ -31,7 +41,7 @@ export const createTransaction = async(req, res) => {
             amount,
             category,
             description,
-            date
+            date: txnDate
         });
 
         return res.status(201).json({message: "Transaction created successfullly", data: transaction});
@@ -73,5 +83,67 @@ export const getTransaction = async(req, res) => {
 
     }catch(error){
         return res.status(500).json({message: "Internal Server error"});
+    }
+}
+
+export const getDashboardData = async(req, res) => {
+
+    try{
+        //const userObjectId = req.user._id;
+        const userId = "68dee6667932bad669e88d22"; // just for testing
+        const userObjectId = new mongoose.Types.ObjectId(userId); // remove this when auth is added
+
+        const now = new Date();
+        const startMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const endMonth = new Date(now.getFullYear(), now.getMonth()+1, 0, 23, 59, 59, 999);
+        const startYear = new Date(now.getFullYear(), 0, 1);
+        const endYear = new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999);
+
+        const [totalBalance, totalMonthlyExpense, barChart, pieChart, recentTransactions] = await Promise.all([
+
+            // totalBalance
+            transactionModel.aggregate([
+                { $match: { user: userObjectId, transactionType: "Balance" } },
+                { $group: { _id: null, total: { $sum: "$amount" } } }
+            ]),
+
+            // totalMonthlyExpense
+            transactionModel.aggregate([
+               { $match: { user: userObjectId, transactionType: "Expense", date: { $gte:startMonth, $lte:endMonth } } },
+               { $group: { _id: null, total: { $sum: "$amount" } } } 
+            ]), 
+
+            // barChart
+            transactionModel.aggregate([
+                { $match: { user: userObjectId, transactionType: "Expense", date: { $gte:startYear, $lte:endYear } } },
+                { $group: { _id: { $month: "$date" }, total: { $sum: "$amount" } } },
+                { $project: { _id: 0, monthNumber: "$_id", total: 1, monthName: {
+                    $arrayElemAt: [
+                    [ "", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ], "$_id"]}} 
+                },
+                { $sort: { monthNumber: 1 } }
+            ]),
+
+            // pieChart
+            transactionModel.aggregate([
+                { $match: { user: userObjectId, transactionType: "Expense", date: { $gte:startMonth, $lte:endMonth } } },
+                { $group: { _id: "$category", total: { $sum: "$amount" } } },
+                { $project: { _id: 0, category: "$_id", total: 1 } },
+            ]),
+
+            // recentTransactions
+            transactionModel.find({user: userObjectId}).sort({ createdAt: -1 }).limit(5)
+        ]);
+
+        return res.status(200).json({
+            totalBalance: totalBalance[0]?.total || 0,
+            totalMonthlyExpense: totalMonthlyExpense[0]?.total || 0,
+            barChart,
+            pieChart,
+            recentTransactions
+        });
+
+    }catch(error){
+        return res.status(500).json({message: "Internal Server error" ,error: error.message});
     }
 }
