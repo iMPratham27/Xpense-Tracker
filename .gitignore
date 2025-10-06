@@ -8,15 +8,15 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Dependencies
-node_modules/
+**/node_modules/
 
 # Build output
-dist
+**/dist/
 dist-ssr
 
 # Environment files
-.env
-.env.*
+**/.env
+**/.env.*
 
 # Local overrides
 *.local
@@ -32,7 +32,7 @@ dist-ssr
 *.sln
 *.sw?
 
-# Optional dev artifacts
+# Optional dev artifacts and Deployment platforms
 coverage/
 .eslintcache
 *.tsbuildinfo
