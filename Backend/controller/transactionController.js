@@ -35,8 +35,7 @@ export const createTransaction = async(req, res) => {
         txnDate.setUTCHours(0, 0, 0, 0);
 
         const transaction = await transactionModel.create({
-            // user: req.user._id,
-            user: "68dee6667932bad669e88d22", // just for testing
+            user: req.user._id,
             transactionType,
             amount,
             category,
@@ -58,8 +57,7 @@ export const getTransaction = async(req, res) => {
         const { page=1, limit=10, transactionType, category } = req.query;
 
         // build query
-        //const query = {user: req.user._id};
-        const query = {user: "68dee6667932bad669e88d22"}; // just for testing
+        const query = {user: req.user._id};
         if(category) query.category = category;
         if(transactionType) query.transactionType = transactionType;
 
@@ -89,9 +87,7 @@ export const getTransaction = async(req, res) => {
 export const getDashboardData = async(req, res) => {
 
     try{
-        //const userObjectId = req.user._id;
-        const userId = "68dee6667932bad669e88d22"; // just for testing
-        const userObjectId = new mongoose.Types.ObjectId(userId); // remove this when auth is added
+        const userObjectId = req.user._id;
 
         const now = new Date();
         const startMonth = new Date(now.getFullYear(), now.getMonth(), 1);
