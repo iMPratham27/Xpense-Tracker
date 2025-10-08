@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { getCurrUser } from "../utils/apiHelper.js";
+import { FadeLoader } from "react-spinners";
 
 export const ProtectedRoute = ({children}) => {
 
@@ -23,7 +24,7 @@ export const ProtectedRoute = ({children}) => {
     }, []);
 
     if(loading){
-        return <p className=" flex justify-center items-center text-3xl font-bold " >Loading....</p>
+        return <div className="flex justify-center items-center h-screen" ><FadeLoader color="hsl(145, 70%, 45%)" /></div>
     }
 
     return authenticated ? children : <Navigate to="/login" replace />

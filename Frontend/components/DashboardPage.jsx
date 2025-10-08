@@ -26,7 +26,7 @@ export const DashboardPage = () => {
     const handleLogout = async() => {
         try{
             await logoutUser();
-            navigate("/login");
+            navigate("/login", { replace: true });
         }catch(err){
             console.error("Logout failed", err);
         }
