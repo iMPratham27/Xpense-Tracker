@@ -44,7 +44,7 @@ export const GoogleLogin = () => {
 
         <button 
           onClick={googleLogin} 
-          className="mt-10 w-full flex items-center justify-center gap-3 bg-white border border-gray-300 shadow-sm rounded-xl px-5 py-3 md:py-4 text-base font-medium text-gray-700 hover:shadow-md hover:translate-y-[-1px] active:scale-95 transition-all duration-200">
+          className="mt-10 w-full cursor-pointer flex items-center justify-center gap-3 bg-white border border-gray-300 shadow-sm rounded-xl px-5 py-3 md:py-4 text-base font-medium text-gray-700 hover:shadow-md hover:translate-y-[-1px] active:scale-95 transition-all duration-200">
           <img
             src="/src/assets/google-icon.svg"
             alt="Google"

@@ -1,8 +1,28 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: Inter, sans-serif;
+
+  --color-bg-dark: hsl(220 13% 91%);  /* ≈ gray-200 */
+  --color-bg:      hsl(210 20% 98%);  /* ≈ gray-50  (page background) */
+  --color-bg-light:hsl(0 0% 100%);    /* white (cards) */
+
+  --color-text:        hsl(220 20% 15%); /* near-black */
+  --color-text-muted:  hsl(220 10% 40%); /* medium gray */
+
+  --color-border: hsl(220 14% 90%);  /* subtle light border */
 }
+
+.dark {
+  --color-bg-dark:  hsl(220 6% 10%); /* deep gray */
+  --color-bg:       hsl(220 6% 14%); /* page background */
+  --color-bg-light: hsl(220 6% 20%); /* cards/surfaces */
+
+  --color-text:       hsl(0 0% 98%);  /* near-white */
+  --color-text-muted: hsl(220 6% 70%);/* soft gray */
+
+  --color-border: hsl(220 7% 28%);   /* subtle dark border */
+}
+
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
