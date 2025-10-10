@@ -56,7 +56,7 @@ export const NavbarMobileTop = () => {
             alt="Xpense logo"
           />
           
-          <p className="font-sans text-lg font-semibold text-text">Xpense</p>
+          <p className="font-sans text-lg font-semibold text-text">XpenseTracker</p>
         </div>
 
         {/* Right side: Theme toggle + Profile */}

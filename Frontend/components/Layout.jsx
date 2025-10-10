@@ -14,7 +14,7 @@ export const Layout = ({ toggleTheme, darkMode }) => {
         <NavbarMobileTop toggleTheme={toggleTheme} darkMode={darkMode} />
       </div>
 
-      <main className="pt-20 pb-20 px-4">
+      <main className="pt-20 pb-20 md:pb-5 px-1">
         <Outlet />
       </main>
 
