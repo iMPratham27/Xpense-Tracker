@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 
 import { transactionModel } from "../model/transactionModel.js";
 
@@ -54,7 +53,7 @@ export const getTransaction = async(req, res) => {
 
     try{
         // for pagination and filtering
-        const { page=1, limit=10, transactionType, category } = req.query;
+        const { page=1, limit=6, transactionType, category } = req.query;
 
         // build query
         const query = {user: req.user._id};
