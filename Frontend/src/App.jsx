@@ -8,6 +8,7 @@ import { PageNotFound } from "../components/PageNotFound.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GoogleLogin } from "../components/GoogleLogin.jsx";
 import { ToastProvider } from "../components/ToastProvider.jsx";
+import { TransactionProvider } from "../context/TransactionContext.jsx";
 
 function App() {
 
@@ -22,23 +23,25 @@ function App() {
   return (
     <>
       <ToastProvider />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" 
-            element={<ProtectedRoute> <Navigate to="/dashboard" replace /> </ProtectedRoute>} 
-          />
+      <TransactionProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" 
+              element={<ProtectedRoute> <Navigate to="/dashboard" replace /> </ProtectedRoute>} 
+            />
 
-          <Route path="/login" element={<GoogleAuthWrapper />} />
+            <Route path="/login" element={<GoogleAuthWrapper />} />
 
-          <Route element={<ProtectedRoute> <Layout/> </ProtectedRoute>} >
-            <Route path="/dashboard" element={<DashboardPage/>} />
-            <Route path="/expenses" element={<ExpensesPage/>} />
-            <Route path="/limits" element={<LimitsPage/>} />
-          </Route>
+            <Route element={<ProtectedRoute> <Layout/> </ProtectedRoute>} >
+              <Route path="/dashboard" element={<DashboardPage/>} />
+              <Route path="/expenses" element={<ExpensesPage/>} />
+              <Route path="/limits" element={<LimitsPage/>} />
+            </Route>
 
-          <Route path="*" element={<PageNotFound/>} />
-        </Routes>
-      </BrowserRouter>
+            <Route path="*" element={<PageNotFound/>} />
+          </Routes>
+        </BrowserRouter>
+      </TransactionProvider>
     </>
   )
 }

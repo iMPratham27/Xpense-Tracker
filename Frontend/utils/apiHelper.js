@@ -13,3 +13,4 @@ export const logoutUser = () => api.post("/auth/logout");
 
 // ================= TRANSACTIONS =================
 export const createTransaction = (data) => api.post("/transaction", data);
+export const getTransaction = (params) => api.get("/transaction", {params})
