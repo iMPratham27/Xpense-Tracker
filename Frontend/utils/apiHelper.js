@@ -1,13 +1,15 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://localhost:8000/api/auth",
+    baseURL: "http://localhost:8000/api",
     withCredentials: true
 });
 
-// send GET request to backend's googleLogin route
-export const googleAuth = (code) => api.get(`/google?code=${code}`);
+// ==================== AUTH ====================
 
-export const getCurrUser = () => api.get("/me");
+export const googleAuth = (code) => api.get(`/auth/google?code=${code}`); // send GET request to backend's googleLogin route
+export const getCurrUser = () => api.get("/auth/me");
+export const logoutUser = () => api.post("/auth/logout");
 
-export const logoutUser = () => api.post("/logout");
+// ================= TRANSACTIONS =================
+export const createTransaction = (data) => api.post("/transaction", data);
