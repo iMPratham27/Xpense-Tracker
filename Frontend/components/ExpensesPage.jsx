@@ -5,6 +5,15 @@ import toast from "react-hot-toast";
 import { FadeLoader } from "react-spinners";
 
 export const ExpensesPage = () => {
+
+  const formatDate = (iso) => {
+    if (!iso) return "";
+    try {
+      return new Date(iso).toLocaleDateString(); // matches dashboard representation (e.g. 10/11/2025)
+    } catch {
+      return iso;
+    }
+  };
   
   // FORM RELATED THINGS
 
@@ -267,7 +276,7 @@ export const ExpensesPage = () => {
                             {t.transactionType === "Balance" ? "Balance" : t.category}
                           </p>
                           <p className="text-xs text-text-muted md:w-28">
-                            {new Date(t.date).toDateString()}
+                            {formatDate(t.date)}
                           </p>
                           <p className="text-xs text-text-muted truncate flex-1">
                             {t.description}

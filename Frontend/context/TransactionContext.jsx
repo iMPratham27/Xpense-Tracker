@@ -1,12 +1,12 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
-import { getTransaction, createTransaction as createTxnApi } from "../utils/apiHelper.js";
+import { getTransaction, createTransaction as createTxnApi, getDashboardData } from "../utils/apiHelper.js";
 
 const TransactionsContext = createContext(null);
 export const useTransactions = () => useContext(TransactionsContext);
 
 export const TransactionProvider = ({ children }) => {
 
-    // core state
+    // expenses state
     const [transactions, setTransactions] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -17,12 +17,24 @@ export const TransactionProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
+    // dashboard state
+    const [dashboard, setDashboard] = useState({
+        totalBalance: 0,
+        totalMonthlyExpense: 0,
+        barChart: [], // [{ monthNumber, total, monthName }]
+        pieChart: [], // [{ category, total }]
+        recentTransactions: []
+    });
+
+    const [dashboardLoading, setDashboardLoading] = useState(false);
+
     /*
         If user clicks between filters/pages very fast, multiple API calls might overlap. 
         Using abortRef, we can cancel the old request before starting a new one. 
         That way only the latest request counts.
     */
     const abortRef = useRef(null);
+    const abortDashboardRef = useRef(null);
 
     // Actions
     const fetchTransactions =  async (opts) => {
@@ -58,6 +70,32 @@ export const TransactionProvider = ({ children }) => {
         }
     }
 
+    const fetchDashboardData = async() => {
+        try{
+           setDashboardLoading(true);
+           
+           if(abortDashboardRef.current) abortDashboardRef.current.abort();
+           abortDashboardRef.current = new AbortController();
+
+           const { data } = await getDashboardData({signal: abortDashboardRef.current.signal});
+
+           // update state
+           setDashboard({
+            totalBalance: data.totalBalance ?? 0,
+            totalMonthlyExpense: data.totalMonthlyExpense ?? 0,
+            barChart: data.barChart ?? [],
+            pieChart: data.pieChart ?? [],
+            recentTransactions: data.recentTransactions ?? []
+           });
+
+        }catch(err){
+            if(err?.name === "CanceledError" || err?.message === "canceled") return;
+            console.error(err);
+        }finally{
+            setDashboardLoading(false);
+        }
+    }
+
     const createTransaction = async(payload) => {
         try{
             const clean = {...payload};
@@ -67,8 +105,9 @@ export const TransactionProvider = ({ children }) => {
 
             await createTxnApi(clean);
 
-            // After add: refresh page 1 with same filters so user sees fresh list
+            // refresh both transaction list and dashboard so ui stays consistent
             await fetchTransactions({page:1 , filters});
+            await fetchDashboardData();
 
         }catch(err){
             console.error(err);
@@ -96,10 +135,22 @@ export const TransactionProvider = ({ children }) => {
         }
     }, [page, filters]);
 
+    useEffect(()=> {
+        fetchDashboardData();
+
+        return () => {
+            if(abortDashboardRef.current) abortDashboardRef.current.abort();
+        }
+    },[])
+
     const value = useMemo(() => ({
         transactions, page, totalPages, total, limit, filters, loading, error,
-        setPage, updateFilters, fetchTransactions, createTransaction
-    }), [transactions, page, totalPages, total, limit, filters, loading, error]);
+        setPage, updateFilters, fetchTransactions, createTransaction,
+        dashboard, dashboardLoading, fetchDashboardData
+    }), [
+        transactions, page, totalPages, total, limit, filters, loading, error, 
+        dashboard, dashboardLoading
+    ]);
 
 
     return (<TransactionsContext.Provider value={value}>{children}</TransactionsContext.Provider>);

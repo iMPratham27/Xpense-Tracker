@@ -83,62 +83,91 @@ export const getTransaction = async(req, res) => {
     }
 }
 
-export const getDashboardData = async(req, res) => {
+export const getDashboardData = async (req, res) => {
+  try {
+    const userObjectId = req.user._id;
 
-    try{
-        const userObjectId = req.user._id;
+    const now = new Date();
+    const startMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+    const startYear = new Date(now.getFullYear(), 0, 1);
+    const endYear = new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999);
 
-        const now = new Date();
-        const startMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-        const endMonth = new Date(now.getFullYear(), now.getMonth()+1, 0, 23, 59, 59, 999);
-        const startYear = new Date(now.getFullYear(), 0, 1);
-        const endYear = new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999);
+    const [
+      totalsAgg,
+      totalMonthlyExpenseAgg,
+      barChart,
+      pieChart,
+      recentTransactions
+    ] = await Promise.all([
 
-        const [totalBalance, totalMonthlyExpense, barChart, pieChart, recentTransactions] = await Promise.all([
+      // totalsAgg: compute total credits and total expenses (all time)
+      transactionModel.aggregate([
+        { $match: { user: userObjectId } },
+        {
+          $group: {
+            _id: null,
+            totalBalanceAdded: {
+              $sum: { $cond: [{ $eq: ["$transactionType", "Balance"] }, "$amount", 0] }
+            },
+            totalExpensesAllTime: {
+              $sum: { $cond: [{ $eq: ["$transactionType", "Expense"] }, "$amount", 0] }
+            }
+          }
+        }
+      ]),
 
-            // totalBalance
-            transactionModel.aggregate([
-                { $match: { user: userObjectId, transactionType: "Balance" } },
-                { $group: { _id: null, total: { $sum: "$amount" } } }
-            ]),
+      // totalMonthlyExpense
+      transactionModel.aggregate([
+        { $match: { user: userObjectId, transactionType: "Expense", date: { $gte: startMonth, $lte: endMonth } } },
+        { $group: { _id: null, total: { $sum: "$amount" } } }
+      ]),
 
-            // totalMonthlyExpense
-            transactionModel.aggregate([
-               { $match: { user: userObjectId, transactionType: "Expense", date: { $gte:startMonth, $lte:endMonth } } },
-               { $group: { _id: null, total: { $sum: "$amount" } } } 
-            ]), 
+      // barChart (expenses per month)
+      transactionModel.aggregate([
+        { $match: { user: userObjectId, transactionType: "Expense", date: { $gte: startYear, $lte: endYear } } },
+        { $group: { _id: { $month: "$date" }, total: { $sum: "$amount" } } },
+        {
+          $project: {
+            _id: 0,
+            monthNumber: "$_id",
+            total: 1,
+            monthName: {
+              $arrayElemAt: [
+                ["", "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+                "$_id"
+              ]
+            }
+          }
+        },
+        { $sort: { monthNumber: 1 } }
+      ]),
 
-            // barChart
-            transactionModel.aggregate([
-                { $match: { user: userObjectId, transactionType: "Expense", date: { $gte:startYear, $lte:endYear } } },
-                { $group: { _id: { $month: "$date" }, total: { $sum: "$amount" } } },
-                { $project: { _id: 0, monthNumber: "$_id", total: 1, monthName: {
-                    $arrayElemAt: [
-                    [ "", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ], "$_id"]}} 
-                },
-                { $sort: { monthNumber: 1 } }
-            ]),
+      // pieChart (category totals this month)
+      transactionModel.aggregate([
+        { $match: { user: userObjectId, transactionType: "Expense", date: { $gte: startMonth, $lte: endMonth } } },
+        { $group: { _id: "$category", total: { $sum: "$amount" } } },
+        { $project: { _id: 0, category: "$_id", total: 1 } }
+      ]),
 
-            // pieChart
-            transactionModel.aggregate([
-                { $match: { user: userObjectId, transactionType: "Expense", date: { $gte:startMonth, $lte:endMonth } } },
-                { $group: { _id: "$category", total: { $sum: "$amount" } } },
-                { $project: { _id: 0, category: "$_id", total: 1 } },
-            ]),
+      // recentTransactions
+      transactionModel.find({ user: userObjectId }).sort({ createdAt: -1 }).limit(5)
+    ]);
 
-            // recentTransactions
-            transactionModel.find({user: userObjectId}).sort({ createdAt: -1 }).limit(5)
-        ]);
+    const totalBalanceAdded = totalsAgg[0]?.totalBalanceAdded || 0;
+    const totalExpensesAllTime = totalsAgg[0]?.totalExpensesAllTime || 0;
+    const totalMonthlyExpense = totalMonthlyExpenseAgg[0]?.total || 0;
 
-        return res.status(200).json({
-            totalBalance: totalBalance[0]?.total || 0,
-            totalMonthlyExpense: totalMonthlyExpense[0]?.total || 0,
-            barChart,
-            pieChart,
-            recentTransactions
-        });
+    const netBalance = totalBalanceAdded - totalExpensesAllTime;
 
-    }catch(error){
-        return res.status(500).json({message: "Internal Server error" ,error: error.message});
-    }
-}
+    return res.status(200).json({
+      totalBalance: netBalance,
+      totalMonthlyExpense,
+      barChart,
+      pieChart,
+      recentTransactions
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server error", error: error.message });
+  }
+};
