@@ -7,6 +7,7 @@ import { router } from "./routes/transactionRoutes.js";
 import { authRouter } from "./routes/authRoutes.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { limitRouter } from "./routes/limitRoutes.js"
 
 const app = express();
 
@@ -21,5 +22,6 @@ app.use(cookieParser());
 
 app.use("/api/transaction", router);
 app.use("/api/auth", authRouter);
+app.use("/api/limit", limitRouter);
 
 app.listen(port, () => { console.log(`Server is running at: ${port}`) })

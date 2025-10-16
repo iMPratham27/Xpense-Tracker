@@ -183,7 +183,7 @@ export const ExpensesPage = () => {
             <button
               type="submit"
               disabled = {isSubmitting}
-              className="w-full bg-blue-500 cursor-pointer hover:bg-blue-600 text-white 
+              className="w-full bg-blue-500 cursor-pointer hover:bg-blue-600 text-white mt-1
                         font-semibold py-2 px-4 rounded-xl transition-colors"
             >
               {isSubmitting ? "Adding..." : "Add Transaction"}

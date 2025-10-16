@@ -15,3 +15,7 @@ export const logoutUser = () => api.post("/auth/logout");
 export const createTransaction = (data) => api.post("/transaction", data);
 export const getTransaction = (params) => api.get("/transaction", {params})
 export const getDashboardData = () => api.get("/transaction/dashboardData");
+
+// ================= LIMITS =================
+export const createLimit = (data) => api.post("/limit", data);
+export const getLimits = () => api.get("/limit");
