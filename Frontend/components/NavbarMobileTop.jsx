@@ -51,7 +51,7 @@ export const NavbarMobileTop = () => {
         {/* Logo + Name */}
         <div className="flex items-center gap-2">
           <img
-            src={darkMode ? "/src/assets/logo_white.webp" : "/src/assets/logo_black.webp"}
+            src={darkMode ? "/logo_white.webp" : "/logo_black.webp"}
             className="w-7 h-7"
             alt="Xpense logo"
           />

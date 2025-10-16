@@ -33,11 +33,11 @@ export const BottomNavbar = () => {
   const linkClasses = (path) =>
   `flex flex-col items-center justify-center flex-1 py-2 rounded-xl transition-colors ${
     location.pathname === path
-      ? "bg-[hsla(0,0%,100%,0.12)] text-text dark:bg-[hsla(0,0%,100%,0.18)] dark:text-[hsl(0,0%,98%)]"
+      ? darkMode
+        ? "bg-[hsla(0,0%,100%,0.15)] text-white"
+        : "bg-[hsl(0,0%,92%)] text-[hsl(0,0%,15%)] font-semibold"
       : "text-text-muted hover:text-text hover:bg-[hsla(0,0%,100%,0.08)]"
   }`;
-
-
 
   return (
     <div className="fixed bottom-4 left-4 right-4 z-50 bg-bg-light border border-border shadow-lg rounded-2xl flex justify-around py-2 px-4 md:hidden">
