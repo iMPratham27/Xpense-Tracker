@@ -58,7 +58,7 @@ export const Navbar = () => {
         <div className="flex items-center gap-2">
           <img
             className="w-8 h-8"
-            src="/src/assets/logo_black.webp"
+            src={darkMode ? "/src/assets/logo_white.webp" : "/src/assets/logo_black.webp"}
             alt="Xpense Tracker logo"
           />
 
@@ -110,7 +110,7 @@ export const Navbar = () => {
             >
               <img
                 className="w-6 h-6 rounded-full"
-                src="/src/assets/user-black.svg"
+                src={darkMode ? "/src/assets/user-white.svg" : "/src/assets/user-black.svg"}
                 alt="profile"
               />
               
@@ -126,7 +126,9 @@ export const Navbar = () => {
                   className=" flex items-center justify-evenly gap-2 cursor-pointer w-full 
                   font-medium px-4 py-2 text-red-600 hover:bg-bg-dark transition-colors"
                 >
-                  <img className="w-4 h-4" src="/src/assets/logout-black.svg" />
+                  <img className="w-4 h-4" 
+                    src={darkMode ? "/src/assets/logout-white.svg" : "/src/assets/logout-black.svg"} 
+                  />
                   Logout
                 </button>
               </div>

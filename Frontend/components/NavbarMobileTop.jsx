@@ -51,7 +51,7 @@ export const NavbarMobileTop = () => {
         {/* Logo + Name */}
         <div className="flex items-center gap-2">
           <img
-            src="/src/assets/logo_black.webp"
+            src={darkMode ? "/src/assets/logo_white.webp" : "/src/assets/logo_black.webp"}
             className="w-7 h-7"
             alt="Xpense logo"
           />
@@ -81,7 +81,7 @@ export const NavbarMobileTop = () => {
             hover:bg-bg-light transition-colors"
           >
             <img
-              src="/src/assets/user-black.svg"
+              src={darkMode ? "/src/assets/user-white.svg" : "/src/assets/user-black.svg"}
               className="w-5 h-5 rounded-full"
               alt="profile"
             />
