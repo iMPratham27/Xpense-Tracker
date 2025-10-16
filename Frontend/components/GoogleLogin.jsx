@@ -28,7 +28,7 @@ export const GoogleLogin = () => {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-white">
       <div className="w-full max-w-md text-center p-4 md:p-6 animate-fadeIn">
         <img
-          src="/src/assets/logo_black.webp"
+          src="/logo_black.webp"
           alt="Xpense Logo"
           className="mx-auto w-16 md:w-20 mb-6"
         />
@@ -46,7 +46,7 @@ export const GoogleLogin = () => {
           onClick={googleLogin} 
           className="mt-10 w-full cursor-pointer flex items-center justify-center gap-3 bg-white border border-gray-300 shadow-sm rounded-xl px-5 py-3 md:py-4 text-base font-medium text-gray-700 hover:shadow-md hover:translate-y-[-1px] active:scale-95 transition-all duration-200">
           <img
-            src="/src/assets/google-icon.svg"
+            src="/google-icon.svg"
             alt="Google"
             className="w-5 h-5"
           />
