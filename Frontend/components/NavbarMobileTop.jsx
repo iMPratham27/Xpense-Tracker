@@ -68,9 +68,9 @@ export const NavbarMobileTop = () => {
             hover:bg-bg transition-colors transform hover:scale-105 active:scale-95 duration-200"
           >
             {darkMode ? (
-              <img src="/src/assets/sun.svg" className="w-5 h-5" alt="Light mode" />
+              <img src="/sun.svg" className="w-5 h-5" alt="Light mode" />
             ) : (
-              <img src="/src/assets/moon.svg" className="w-5 h-5" alt="Dark mode" />
+              <img src="/moon.svg" className="w-5 h-5" alt="Dark mode" />
             )}
           </button>
 
@@ -81,7 +81,7 @@ export const NavbarMobileTop = () => {
             hover:bg-bg-light transition-colors"
           >
             <img
-              src={darkMode ? "/src/assets/user-white.svg" : "/src/assets/user-black.svg"}
+              src={darkMode ? "/user-white.svg" : "/user-black.svg"}
               className="w-5 h-5 rounded-full"
               alt="profile"
             />
@@ -96,7 +96,10 @@ export const NavbarMobileTop = () => {
                 className="flex items-center gap-2 w-full font-medium px-4 py-2 text-red-600 
                 hover:bg-bg-dark transition-colors"
               >
-                <img src="/src/assets/logout-black.svg" className="w-4 h-4" alt="logout" />
+                <img 
+                  className="w-4 h-4" 
+                  src={darkMode ? "/logout-white.svg" : "/logout-black.svg"} 
+                />
                 Logout
               </button>
             </div>

@@ -42,15 +42,15 @@ export const BottomNavbar = () => {
   return (
     <div className="fixed bottom-4 left-4 right-4 z-50 bg-bg-light border border-border shadow-lg rounded-2xl flex justify-around py-2 px-4 md:hidden">
       <Link to="/dashboard" className={linkClasses("/dashboard")}>
-        <img src={darkMode ? "/src/assets/dashboard-white.svg" : "/src/assets/dashboard-black.svg"} className="w-6 h-6" alt="Dashboard" />
+        <img src={darkMode ? "/dashboard-white.svg" : "/dashboard-black.svg"} className="w-6 h-6" alt="Dashboard" />
         <span className="text-[10px] font-medium">Dashboard</span>
       </Link>
       <Link to="/expenses" className={linkClasses("/expenses")}>
-        <img src={darkMode ? "/src/assets/expense-white.svg" : "/src/assets/expense-black.svg"} className="w-6 h-6" alt="Expenses" />
+        <img src={darkMode ? "/expense-white.svg" : "/expense-black.svg"} className="w-6 h-6" alt="Expenses" />
         <span className="text-[10px] font-medium">Expenses</span>
       </Link>
       <Link to="/limits" className={linkClasses("/limits")}>
-        <img src={darkMode ? "/src/assets/limits-white.svg" : "/src/assets/limits-black.svg"} className="w-6 h-6" alt="Limits" />
+        <img src={darkMode ? "/limits-white.svg" : "/limits-black.svg"} className="w-6 h-6" alt="Limits" />
         <span className="text-[10px] font-medium">Limits</span>
       </Link>
     </div>

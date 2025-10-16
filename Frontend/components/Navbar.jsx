@@ -58,7 +58,7 @@ export const Navbar = () => {
         <div className="flex items-center gap-2">
           <img
             className="w-8 h-8"
-            src={darkMode ? "/src/assets/logo_white.webp" : "/src/assets/logo_black.webp"}
+            src={darkMode ? "/logo_white.webp" : "/logo_black.webp"}
             alt="Xpense Tracker logo"
           />
 
@@ -89,12 +89,12 @@ export const Navbar = () => {
           >
             {darkMode ? 
               (<img
-                src="/src/assets/sun.svg" 
+                src="/sun.svg" 
                 className="w-5 h-5 transition-all duration-300 ease-in-out transform scale-100 opacity-100"
                 alt="Light mode"  
               />) : 
               (<img
-                src="/src/assets/moon.svg" 
+                src="/moon.svg" 
                 className="w-5 h-5 transition-all duration-300 ease-in-out transform scale-100 opacity-100"
                 alt="Dark mode"  
               />)
@@ -110,7 +110,7 @@ export const Navbar = () => {
             >
               <img
                 className="w-6 h-6 rounded-full"
-                src={darkMode ? "/src/assets/user-white.svg" : "/src/assets/user-black.svg"}
+                src={darkMode ? "/user-white.svg" : "/user-black.svg"}
                 alt="profile"
               />
               
@@ -127,7 +127,7 @@ export const Navbar = () => {
                   font-medium px-4 py-2 text-red-600 hover:bg-bg-dark transition-colors"
                 >
                   <img className="w-4 h-4" 
-                    src={darkMode ? "/src/assets/logout-white.svg" : "/src/assets/logout-black.svg"} 
+                    src={darkMode ? "/logout-white.svg" : "/logout-black.svg"} 
                   />
                   Logout
                 </button>
