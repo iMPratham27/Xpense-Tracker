@@ -9,6 +9,8 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GoogleLogin } from "../components/GoogleLogin.jsx";
 import { ToastProvider } from "../components/ToastProvider.jsx";
 import { TransactionProvider } from "../context/TransactionContext.jsx";
+import { Privacy } from "../components/Privacy.jsx";
+import { Terms } from "../components/Terms.jsx";
 
 function App() {
 
@@ -31,6 +33,9 @@ function App() {
             />
 
             <Route path="/login" element={<GoogleAuthWrapper />} />
+
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
 
             <Route element={<ProtectedRoute> <Layout/> </ProtectedRoute>} >
               <Route path="/dashboard" element={<DashboardPage/>} />
