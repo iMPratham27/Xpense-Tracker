@@ -1,6 +1,6 @@
-import WalletIcon from "/src/assets/wallet.svg";
-import ChartIcon from "/src/assets/chart.svg";
-import PieIcon from "/src/assets/pie.svg";
+import WalletIcon from "/wallet.svg";
+import ChartIcon from "/chart.svg";
+import PieIcon from "/pie.svg";
 
 export const EmptyState = ({ message, type }) => {
   const icons = {
