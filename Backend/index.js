@@ -11,11 +11,14 @@ import { limitRouter } from "./routes/limitRoutes.js"
 
 const app = express();
 
+// Use trust proxy so secure cookies work behind Render/Proxies
+app.set("trust proxy", 1);
+
 connectDB();
 
 app.use(express.json());
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
     credentials: true
 }));
 app.use(cookieParser());

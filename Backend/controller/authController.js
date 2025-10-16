@@ -40,7 +40,7 @@ export const googleLogin = async(req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "none",
             maxAge: 12*60*60*1000
         });
 
@@ -92,7 +92,7 @@ export const logoutUser = async(req, res) => {
     res.clearCookie("token", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: "none",
     })
 
     return res.status(200).json({
