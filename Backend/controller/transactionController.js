@@ -32,7 +32,7 @@ export const createTransaction = async(req, res) => {
       }
 
       // Normalize to UTC midnight → avoids timezone issues
-      txnDate.setUTCHours(0, 0, 0, 0);
+      txnDate = new Date(Date.UTC(txnDate.getUTCFullYear(), txnDate.getUTCMonth(), txnDate.getUTCDate()));
 
       const transaction = await transactionModel.create({
         user: req.user._id,

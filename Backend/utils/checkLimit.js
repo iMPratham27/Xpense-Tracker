@@ -19,7 +19,6 @@ export const checkLimit = async (userId, category) => {
     const { end } = getMonthStartEnd();
 
     const limitStart = new Date(limit.createdAt);
-    limitStart.setUTCMilliseconds(limitStart.getUTCMilliseconds() + 1);
 
     const agg = await transactionModel.aggregate([
       {
@@ -27,7 +26,7 @@ export const checkLimit = async (userId, category) => {
           user: new mongoose.Types.ObjectId(userId),
           transactionType: "Expense",
           category,
-          date: { $gt: limitStart, $lte: end },
+          date: { $gte: limitStart, $lte: end },
         },
       },
       { $group: { _id: null, total: { $sum: "$amount" } } },
