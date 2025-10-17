@@ -1,4 +1,3 @@
-
 import { transactionModel } from "../model/transactionModel.js";
 import { checkLimit } from "../utils/checkLimit.js";
 
@@ -43,11 +42,7 @@ export const createTransaction = async(req, res) => {
         date: txnDate
       });
 
-      console.log(`✅ New transaction created: ${transaction._id} ${transaction.transactionType} ${transaction.category || ""} ₹${transaction.amount} date=${transaction.date.toISOString()} createdAt=${transaction.createdAt?.toISOString()}`);
-
-
       if (transactionType === "Expense") {
-        console.log("🔍 Checking limit for category:", category);
         checkLimit(req.user._id, category).catch((err) =>
           console.error("Limit check failed:", err.message)
         );

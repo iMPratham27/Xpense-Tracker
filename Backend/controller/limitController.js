@@ -1,4 +1,3 @@
-// controllers/limitController.js
 import { limitModel } from "../model/limitModel.js";
 import { transactionModel } from "../model/transactionModel.js";
 import { getCurrentMonthYear, isLastDayOfMonth, getMonthStartEnd } from "../utils/dateUtils.js";
@@ -42,8 +41,6 @@ export const createLimit = async (req, res) => {
       monthYear,
     });
 
-    console.log(`✅ Limit created: user=${userId} category=${category} limit=${limitAmount} createdAt=${limit.createdAt.toISOString()}`);
-
     return res.status(201).json({ data: limit, message: "Limit added successfully" });
   } catch (err) {
     if (err.code === 11000) {
@@ -84,8 +81,6 @@ export const getLimits = async (req, res) => {
         return { ...l, spent, percent };
       })
     );
-
-    console.log("📊 getLimits results:", results.map(r => ({ cat: r.category, spent: r.spent, percent: r.percent, limit: r.limitAmount })));
 
     return res.status(200).json({ results });
   } catch (err) {

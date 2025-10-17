@@ -1,4 +1,3 @@
-// utils/checkLimit.js
 import { limitModel } from "../model/limitModel.js";
 import { transactionModel } from "../model/transactionModel.js";
 import { sendLimitAlert } from "./sendMail.js";
@@ -27,8 +26,6 @@ export const checkLimit = async (userId, category) => {
     // Only count transactions that were created after the limit was created.
     const limitCreatedAt = new Date(limit.createdAt);
 
-    console.log(`🕒 checkLimit: user=${userId}, category=${category}, limitCreatedAt=${limitCreatedAt.toISOString()}, monthEnd=${end.toISOString()}`);
-
     const agg = await transactionModel.aggregate([
       {
         $match: {
@@ -44,8 +41,6 @@ export const checkLimit = async (userId, category) => {
 
     const spent = agg[0]?.total || 0;
     const percent = Math.round((spent / limit.limitAmount) * 100);
-
-    console.log(`🧮 limit check result: category=${category} spent=${spent} limit=${limit.limitAmount} percent=${percent}`);
 
     let sendMail90 = false;
     let sendMail100 = false;

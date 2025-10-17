@@ -23,7 +23,7 @@ export const ExpensesPage = () => {
       amount: "",
       category: "",
       description: "",
-      date: new Date().toISOString().slice(0, 10),
+      date: new Date().toLocaleDateString('en-CA')
     }
   });
 
