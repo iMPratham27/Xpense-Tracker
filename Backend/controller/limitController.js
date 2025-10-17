@@ -54,7 +54,7 @@ export const getLimits = async(req, res) => {
     try{
         const userId = req.user._id;
         const monthYear = getCurrentMonthYear();
-        const { start, end } = getMonthStartEnd();
+        const { end } = getMonthStartEnd();
 
         const limits = await limitModel.find({
             user: userId,
@@ -62,14 +62,14 @@ export const getLimits = async(req, res) => {
         }).lean();
 
         const results = await Promise.all(
-            limits.map(async (l) => {
+            limits.map( async(l) => {
                 const spentAgg = await transactionModel.aggregate([
                     {
                         $match: {
                             user: new mongoose.Types.ObjectId(userId),
                             category: l.category,
                             transactionType: "Expense",
-                            date: {$gte: start, $lte: end}
+                            date: {$gte: new Date(l.createdAt), $lte: end}
                         },
                     },
                     {

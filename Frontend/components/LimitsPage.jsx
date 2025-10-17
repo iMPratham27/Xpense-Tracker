@@ -62,7 +62,7 @@ export const LimitsPage = () => {
 
   return (
     <div className="p-4 md:p-6 lg:p-8 bg-bg min-h-screen font-sans animate-fadeIn">
-      {/* Keep the content centered and wide like Expenses Page */}
+      
       <div className="max-w-8xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* =====================
             ADD LIMIT FORM
