@@ -11,8 +11,12 @@ const transporter = nodemailer.createTransport({
 });
 
 // Verify Gmail connection once on startup
-transporter.verify((error) => {
-  if (error) console.error("SMTP verification failed:", error.message);
+transporter.verify((error, success) => {
+  if (error) {
+    console.error("❌ SMTP verification failed:", error.message);
+  } else {
+    console.log("✅ SMTP server ready to send emails");
+  }
 });
 
 export const sendLimitAlert = async (userId, category, limit, spent, level) => {
