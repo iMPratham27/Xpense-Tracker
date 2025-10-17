@@ -44,7 +44,9 @@ export const createTransaction = async(req, res) => {
       });
 
       if (transactionType === "Expense") {
-        await checkLimit(req.user._id, category);
+        checkLimit(req.user._id, category).catch((err) =>
+          console.error("Limit check failed:", err.message)
+        );
       }
 
       return res.status(201).json({message: "Transaction created successfullly", data: transaction});
