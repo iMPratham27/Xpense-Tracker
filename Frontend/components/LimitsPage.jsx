@@ -47,8 +47,7 @@ export const LimitsPage = () => {
       reset();
       fetchLimits();
     } catch (err) {
-      const msg = err?.response?.data?.message || "Failed to add limit ❌";
-      toast.error(msg);
+      toast.error("Can not add more limits ❌");
     }
   };
 
