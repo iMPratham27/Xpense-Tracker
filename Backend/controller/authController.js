@@ -36,12 +36,15 @@ export const googleLogin = async(req, res) => {
             {expiresIn: process.env.JWT_TIMEOUT}
         );
 
-        // store JWT in the cookie
+        // Detect environment automatically
+        const isProduction = process.env.FRONTEND_URL?.includes("vercel.app");
+
+        // Store JWT in cookie
         res.cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "none",
-            maxAge: 12*60*60*1000
+        httpOnly: true,
+        secure: isProduction, // true only for Render + Vercel
+        sameSite: isProduction ? "none" : "lax", // 'lax' for localhost
+        maxAge: 12 * 60 * 60 * 1000, // 12 hours
         });
 
         return res.status(200).json({
@@ -89,11 +92,15 @@ export const getMe = async(req, res) => {
 }
 
 export const logoutUser = async(req, res) => {
+
+    // Detect environment automatically
+    const isProduction = process.env.FRONTEND_URL?.includes("vercel.app");
+
     res.clearCookie("token", {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
-    })
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
+    });
 
     return res.status(200).json({
         message: "Logged out successfully"
