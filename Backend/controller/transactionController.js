@@ -32,7 +32,7 @@ export const createTransaction = async(req, res) => {
       }
 
       // Normalize to UTC midnight → avoids timezone issues
-      txnDate = new Date(Date.UTC(txnDate.getUTCFullYear(), txnDate.getUTCMonth(), txnDate.getUTCDate()));
+      txnDate.setUTCHours(0, 0, 0, 0);
 
       const transaction = await transactionModel.create({
         user: req.user._id,
@@ -43,7 +43,11 @@ export const createTransaction = async(req, res) => {
         date: txnDate
       });
 
+      console.log(`✅ New transaction created: ${transaction._id} ${transaction.transactionType} ${transaction.category || ""} ₹${transaction.amount} date=${transaction.date.toISOString()} createdAt=${transaction.createdAt?.toISOString()}`);
+
+
       if (transactionType === "Expense") {
+        console.log("🔍 Checking limit for category:", category);
         checkLimit(req.user._id, category).catch((err) =>
           console.error("Limit check failed:", err.message)
         );
