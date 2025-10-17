@@ -26,7 +26,7 @@ export const sendLimitAlert = async (userId, category, limit, spent, level) => {
     `;
 
     const response = await resend.emails.send({
-      from: "Xpense Tracker <no-reply@xpensetracker.dev>", // use a sender domain
+      from: "Xpense Tracker <onboarding@resend.dev>",
       to: user.email,
       subject,
       html,
