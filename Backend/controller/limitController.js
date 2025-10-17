@@ -46,7 +46,15 @@ export const createLimit = async(req, res) => {
         });
 
     }catch(err){
-        return res.status(500).json({message: "Internal server error"});
+        if (err.code === 11000) { // duplicate category
+            return res.status(400).json({
+                message: "A limit for this category already exists this month.",
+            });
+        }
+        console.error("❌ Error creating limit:", err.message);
+        return res.status(500).json({
+            message: "Something went wrong while adding your limit. Please try again.",
+        });
     }
 }
 
