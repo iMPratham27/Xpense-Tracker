@@ -72,7 +72,6 @@ export const TransactionProvider = ({ children }) => {
 
     const fetchDashboardData = async() => {
         try{
-           setDashboardLoading(true);
            
            if(abortDashboardRef.current) abortDashboardRef.current.abort();
            abortDashboardRef.current = new AbortController();
@@ -127,6 +126,7 @@ export const TransactionProvider = ({ children }) => {
 
     // keep data in sync : whenever page or filter changes
     useEffect(() => {
+        if(!setDashboardLoading) return;
         fetchTransactions({ page, filters });
 
         // cleanup
@@ -146,7 +146,7 @@ export const TransactionProvider = ({ children }) => {
     const value = useMemo(() => ({
         transactions, page, totalPages, total, limit, filters, loading, error,
         setPage, updateFilters, fetchTransactions, createTransaction,
-        dashboard, dashboardLoading, fetchDashboardData
+        dashboard, dashboardLoading, setDashboardLoading, fetchDashboardData
     }), [
         transactions, page, totalPages, total, limit, filters, loading, error, 
         dashboard, dashboardLoading

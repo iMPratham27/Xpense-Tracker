@@ -61,6 +61,7 @@ export const DashboardPage = () => {
       try{
         const { data } = await getCurrUser();
         setUser(data);
+        setDashboardLoading(true);
       }catch(err){
         console.log(err);
       }
@@ -86,7 +87,7 @@ export const DashboardPage = () => {
   // Icon for Balance
   const balanceIcon = "💰";
 
-  const { dashboard, dashboardLoading } = useTransactions();
+  const { dashboard, dashboardLoading, setDashboardLoading  } = useTransactions();
 
   // bar chart data
   const monthlyData = useMemo(() => {

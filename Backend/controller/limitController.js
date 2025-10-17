@@ -63,13 +63,17 @@ export const getLimits = async(req, res) => {
 
         const results = await Promise.all(
             limits.map( async(l) => {
+
+                const limitStart = new Date(l.createdAt);
+                limitStart.setUTCHours(0, 0, 0, 0);
+
                 const spentAgg = await transactionModel.aggregate([
                     {
                         $match: {
                             user: new mongoose.Types.ObjectId(userId),
                             category: l.category,
                             transactionType: "Expense",
-                            date: {$gte: new Date(l.createdAt), $lte: end}
+                            date: {$gte: new Date(limitStart), $lte: end}
                         },
                     },
                     {

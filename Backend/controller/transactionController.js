@@ -43,12 +43,10 @@ export const createTransaction = async(req, res) => {
         date: txnDate
       });
 
-      if(transactionType == "Expense"){
-        try{
-          await checkLimit(req.user._id, category);
-        }catch(err){
-          console.error("Limit check failed", err.message);
-        }
+      if (transactionType === "Expense") {
+        checkLimit(req.user._id, category).catch(err =>
+          console.error("Limit check failed:", err.message)
+        );
       }
 
       return res.status(201).json({message: "Transaction created successfullly", data: transaction});

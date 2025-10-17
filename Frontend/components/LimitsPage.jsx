@@ -130,7 +130,7 @@ export const LimitsPage = () => {
           </form>
 
           <p className="text-xs text-text-muted mt-6 leading-relaxed">
-            • You can’t set a new limit for a category until the previous one is completed.<br/>
+            • You can set only one spending limit per category per month.<br/>
             • You can’t set a limit on the last day of the month.<br/>
             • Email alerts are sent automatically at 90% and 100%.
           </p>
