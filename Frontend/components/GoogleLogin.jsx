@@ -1,6 +1,7 @@
 import { useGoogleLogin } from "@react-oauth/google";
 import { googleAuth } from "../utils/apiHelper.js";
 import { useNavigate } from "react-router-dom";
+import { FadeLoader } from "react-spinners";
 
 export const GoogleLogin = () => {
   const navigate = useNavigate();
@@ -9,6 +10,7 @@ export const GoogleLogin = () => {
     try {
       if (authResult["code"]) {
         const result = await googleAuth(authResult["code"]);
+        <FadeLoader color="hsl(145, 70%, 45%)" />
         navigate("/dashboard", { replace: true });
       }
     } catch (err) {
